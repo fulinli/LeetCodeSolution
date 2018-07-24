@@ -14,7 +14,7 @@ Input : (2 -> 4 -> 3) + (5 -> 6 -> 4)
  *     ListNode(int x) : val(x), next(NULL) {}
  * };
  */
-class Solution
+class Solution1 //没有考虑大数相加的问题
 {
   public:
     ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
@@ -60,7 +60,7 @@ class Solution
         return result;
     }
 };
-class Solution
+class Solution2 //很傻逼的解法
 {
   public:
     ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
@@ -140,5 +140,37 @@ class Solution
             }
         }
         return result;
+    }
+};
+class Solution3 //官方解法实现
+{
+  public:
+    ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
+    {
+        struct ListNode dummyHead(0);
+        struct ListNode *p = (ListNode *)malloc(sizeof(ListNode));
+        p = l1;
+        struct ListNode *q = (ListNode *)malloc(sizeof(ListNode));
+        q = l2;
+        struct ListNode *curr = &dummyHead;
+        int carry = 0;
+        while (p != NULL || q != NULL)
+        {
+            int x = (p != NULL) ? p->val : 0;
+            int y = (q != NULL) ? q->val : 0;
+            int sum = carry + x + y;
+            carry = sum / 10;
+            curr->next = new ListNode(sum % 10);
+            curr = curr->next;
+            if (p != NULL)
+                p = p->next;
+            if (q != NULL)
+                q = q->next;
+        }
+        if (carry > 0)
+        {
+            curr->next = new ListNode(carry);
+        }
+        return dummyHead.next;
     }
 };
