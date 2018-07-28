@@ -18,27 +18,41 @@ A   L S  I G
 Y A   H R
 P     I 
 */
+//个人解法，主要讲Z字形变换看作是W形的变换，声明一个numRows×s.length()的数组, 将s中的每个字符从上往下，从左往右向数组中赋值。最后再按一行一列将字符读出。
 class Solution {
 public:
     string convert(string s, int numRows) {
         vector<vector<char>> ZZarr(numRows, vector<char>(s.length()));
-        string str;
-        bool dirflg = true;
-        for(int i = 0, j = 0; i < s.length(); i++)
+        string str = "";
+        bool goingDown = true;
+        if(numRows == 1)
+            str = s;
+        else
         {
-            ZZarr[j][i]=s[i];
-            if(j == numRows - 1)
+            for(int i = 0, j = 0; i < s.length(); i++)
             {
-                dirflg = false;    
+                ZZarr[j][i]=s[i];
+                if(j == numRows - 1)
+                {
+                    goingDown = false;    
+                }
+                if(j == 0)
+                {
+                    goingDown = true;
+                }
+                if(goingDown)
+                    j++;
+                else
+                    j--;
             }
-            if(j == 0)
+            for(int j = 0; j < numRows; j++)
             {
-                dirflg = true;
+                for(int i = 0; i < s.length(); i++)
+                {
+                    if(ZZarr[j][i] != '\0')
+                        str = str + ZZarr[j][i];
+                }
             }
-            if(dirflg)
-                j++;
-            else
-                j--;
         }
         return str;
     }
