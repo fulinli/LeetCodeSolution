@@ -25,12 +25,9 @@ The median is (2 + 3)/2 = 2.5
     2. n >= m  i=0~m, j = (m+n)/2 - i 保证j不是负的
     3. num2[j-1] <= num1[i] && num1[i-1] <= num2[j]
 */
-
 class Solution {
-    
 public:
     double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
-        int median;
         int m = nums1.size();
         int n = nums2.size();
         if(m > n)
@@ -40,6 +37,13 @@ public:
             n = temp;
             nums1.swap(nums2);
         }
+        if(m == 0)  
+        {
+            if(n % 2==1)
+                return nums2[n/2];
+            else
+                return (nums2[(n-1)/2]+nums2[(n/2)])/2.0;
+        }
         cout<<"m = "<<m<<endl;
         cout<<"n = "<<n<<endl;
         int iMin = 0;
@@ -48,50 +52,62 @@ public:
         cout<<"halfLen = "<<halfLen<<endl;
         while(iMin <= iMax)
         {
+            cout<<"*******"<<endl;
+            cout<<"iMin = "<<iMin<<endl;
+            cout<<"iMax = "<<iMax<<endl;
             int i = (iMin + iMax) / 2;
+            cout<<"i = "<<i<<endl;
             int j = halfLen - i;
-            if(i < iMax && nums2[j-1] > nums1[i])
+            cout<<"j = "<<j<<endl;
+            cout<<"nums2[j-1] = "<<nums2[j-1]<<endl;
+            cout<<"nums1[i]= "<<nums1[i]<<endl;
+            cout<<"nums1[i-1] = "<<nums1[i-1]<<endl;
+            cout<<"nums2[j] = "<<nums2[j]<<endl;
+            if(nums1[i-1] > nums2[j] && i>iMin)
             {
-                iMin = iMin + 1; // i太小了
+                iMax = iMax - 1;
             }
-            else if(i > iMin && nums1[i-1] < nums2[j])
+            else if(nums1[i] < nums2[j-1] && i<iMax) 
             {
-                iMax = iMax - 1; // i太大了
+                iMin = iMin + 1;
             }
             else
             {
-                int maxLeft = 0;
+                int maxleft, minright;
                 if(i == 0)
                 {
-                    maxLeft = nums2[j-1];
+                    maxleft = nums2[j-1];
                 }
                 else if(j == 0)
                 {
-                    maxLeft = nums1[i-1];
+                    maxleft = nums1[i-1];
                 }
                 else
                 {
-                    maxLeft = max(nums1[i-1], nums2[j-1]);
+                    maxleft = max(nums1[i-1], nums2[j-1]);
                 }
-                if((m+n)%2 == 1)
-                {
-                    return maxLeft;
-                }
-                int minRight = 0;
                 if(i == m)
                 {
-                    minRight = nums2[j];
+                    minright = nums2[j];
                 }
                 else if(j == n)
                 {
-                    minRight = nums1[i];
+                    minright = nums1[i];
                 }
                 else
-                {
-                    minRight = min(nums1[i], nums2[j]);
+                {          
+                    minright = min(nums1[i], nums2[j]);
                 }
-
-                return (maxLeft + minRight)/2;
+                cout<<"maxleft = "<<maxleft<<endl;
+                cout<<"minright = "<<minright<<endl;
+                if( ( m + n ) % 2 == 1)
+                {
+                    return minright;   
+                }
+                if( ( m + n ) % 2 == 0)
+                {
+                    return (maxleft+minright)/2.0;
+                }   
             }
         }
     }
