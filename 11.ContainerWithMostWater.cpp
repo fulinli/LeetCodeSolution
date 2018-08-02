@@ -10,7 +10,8 @@ Example:
 Input: [1,8,6,2,5,4,8,3,7]
 Output: 49 
 */
-class Solution {
+//错解
+class Solution1 {
 public:
     int maxArea(vector<int>& height) 
     {
@@ -20,7 +21,9 @@ public:
             int maxindex;
             int maxheight = findmax(height, maxindex);
             int area = findmaxarea(height, maxheight, maxindex);
+            // ***********************************************//
             height.erase(height.begin() + maxindex);
+            // ***********************************************//
             maxarea = area > maxarea ? area : maxarea;
         }
         return maxarea;
@@ -36,7 +39,6 @@ public:
                 maxindex = i;
             }
         }
-
         return maxheight;
     }
     int findmaxarea(vector<int>& height, int maxheight, int maxindex)
@@ -49,5 +51,23 @@ public:
         }
 
         return maxarea;
+    }
+};
+
+//正解
+class Solution2 {
+public:
+    int maxArea(vector<int>& height) {
+        int maxarea = 0; 
+        int temparea = 0;
+        for(int i = 0; i < height.size(); i++)
+        {
+            for(int j = i + 1; j < height.size(); j++)
+            {
+                temparea = abs(j-i) * min(height[i], height[j]);
+                maxarea = temparea > maxarea ? temparea : maxarea;
+            }
+        }
+        return maxarea;      
     }
 };
