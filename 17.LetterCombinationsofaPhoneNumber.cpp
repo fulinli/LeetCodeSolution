@@ -1,22 +1,28 @@
+//没想出来，直接AC别人的答案
 class Solution {
 public:
     vector<string> letterCombinations(string digits) {
-        vector<string> res, val, buttons;
+        vector<string> res;
         int n = digits.length();
-        buttons.push_back("");
-        buttons.push_back("");
-        buttons.push_back("abc");
-        buttons.push_back("def");
-        buttons.push_back("ghi");
-        buttons.push_back("jkl");
-        buttons.push_back("mno");
-        buttons.push_back("pqrs");
-        buttons.push_back("tuv");
-        buttons.push_back("wxyz");
-        for(int i = 0; i < n; i++){
-            int num = (int)(digits[i] - 48);
-            val.push_back(buttons[num]);
+        if(n <= 0){
+            return vector<string>();
+        }
+        string base[] = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        string t;
+        letterCombination(digits, res, 0, t, base);
+    
+        return res;
+    }
+    void letterCombination(string& digits, vector<string>& res, int index, string& t, string base[]){
+        if(index == digits.length()){
+            res.push_back(t);
+            return;
         }
         
+        for(int i = 0; i < base[digits[index] - '0'].length(); i++){
+            t += base[digits[index] - '0'][i];
+            letterCombination(digits, res, index + 1, t, base);
+            t.pop_back();
+        }
     }
 };
