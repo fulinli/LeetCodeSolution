@@ -9,45 +9,6 @@
 class Solution {
 public:
     ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
-        struct ListNode *p = l1;
-        struct ListNode *q = l2;
-        struct ListNode *s, *t;
-        s = l1->val >= l2->val ? l2 : l1;
-        t = s;
-        while(p->next != NULL || q->next != NULL){
-            if(p->next!=NULL && q->next != NULL){
-                if(p->val < q->val){
-                    t->next = p;
-                    p = p->next;
-                    t = t->next;
-                }
-                else if(p->val > q->val){
-                    t->next = q;
-                    q = q->next;
-                    t = t->next;
-                }
-                else{
-                    t->next = p;
-                    t = t->next;
-                    t->next = q;
-                    p = p->next;
-                    q = q->next;
-                }
-            }
-            if(p->next == NULL && q->next != NULL){
-                t->next = q;
-            }
-            if(p->next != NULL && q->next == NULL){
-                t->next = p;
-            }
-        }
-        return s;
-    }
-};  
-
-class Solution {
-public:
-    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
         if(l1==NULL && l2 == NULL){
             return l1;
         }else if(l1==NULL && l2 != NULL){
@@ -106,5 +67,47 @@ public:
             t->next = NULL;
             return s;
         }
+    }
+};
+
+//只要是链表题，就要极力避免new新节点。
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        if (l1 == NULL) {
+            return l2;
+        }
+        if (l2 == NULL) {
+            return l1;
+        }
+        if (l1->val > l2->val) {
+            return mergeTwoLists(l2, l1);
+        }
+        
+        ListNode *l3 = l1;
+        ListNode *t3 = l3;
+        l1 = l1->next;
+        t3->next = NULL;
+        
+        while (l1 != NULL && l2 != NULL) {
+            if (l1->val < l2->val) {
+                t3->next = l1;
+                l1 = l1->next;
+            } else {
+                t3->next = l2;
+                l2 = l2->next;
+            }
+            t3 = t3->next;
+            t3->next = NULL;
+        }
+        if (l1 != NULL) {
+            t3->next = l1;
+            l1 = NULL;
+        }
+        if (l2 != NULL) {
+            t3->next = l2;
+            l2 = NULL;
+        }
+        return l3;
     }
 };
